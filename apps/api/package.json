@@ -1,0 +1,31 @@
+{
+  "name": "@horse-timer/api",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "tsx src/main.ts",
+    "test": "vitest run --config ../../vitest.config.ts apps/api/tests"
+  },
+  "dependencies": {
+    "@horse-timer/hardware-adapters": "0.1.0",
+    "@horse-timer/timer-engine": "0.1.0",
+    "@horse-timer/types": "0.1.0",
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/platform-socket.io": "^11.0.1",
+    "@nestjs/websockets": "^11.0.1",
+    "@prisma/client": "^6.6.0",
+    "argon2": "^0.41.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "ioredis": "^5.6.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "serialport": "^13.0.0",
+    "socket.io": "^4.8.1"
+  }
+}

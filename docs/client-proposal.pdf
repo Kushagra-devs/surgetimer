@@ -1,0 +1,517 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+2 0 obj
+<< /Length 1900 >>
+stream
+BT
+/F1 9 Tf
+1 0 0 1 42 800 Tm
+0 g
+(HORSE SHOW JUMPING TIMER SOFTWARE PROPOSAL) Tj
+0 -12 Td
+(ALGE + vMix Integrated Real-Time Competition Timing, Broadcast, and Spectator Platform) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(FIELD                     | VALUE) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Prepared For              | [Client Name / Organization]) Tj
+0 -12 Td
+(Prepared By               | [Your Company Name]) Tj
+0 -12 Td
+(Proposal Date             | March 28, 2026) Tj
+0 -12 Td
+(Version                   | v1.0) Tj
+0 -12 Td
+(Project Duration          | 30 days development + 15 days testing buffer) Tj
+0 -12 Td
+(Confidentiality           | Confidential and proprietary proposal) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(EXECUTIVE SUMMARY) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(TOPIC                     | DETAILS) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Project Objective         | Build a production-grade horse show jumping) Tj
+0 -12 Td
+(                          | timing platform integrated with ALGE hardware,) Tj
+0 -12 Td
+(                          | vMix broadcast workflows, spectator live views,) Tj
+0 -12 Td
+(                          | widgets, overlays, and operational dashboards.) Tj
+0 -12 Td
+(Primary Outcome          | Reliable server-authoritative competition timing) Tj
+0 -12 Td
+(                          | with judge controls, hardware diagnostics, live) Tj
+0 -12 Td
+(                          | scoreboards, QR access, and reporting.) Tj
+0 -12 Td
+(Delivery Window          | 45 calendar days total.) Tj
+0 -36 Td
+(Page 1 of 7) Tj
+ET
+endstream
+endobj
+3 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>
+endobj
+4 0 obj
+<< /Length 2246 >>
+stream
+BT
+/F1 9 Tf
+1 0 0 1 42 800 Tm
+0 g
+(CLIENT REQUIREMENT UNDERSTANDING) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(AREA                      | CLIENT NEED              | PROPOSED RESPONSE) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Live Timing               | Accurate round timing    | Deterministic server-) Tj
+0 -12 Td
+(                          | during competitions      | authoritative timer engine) Tj
+0 -12 Td
+(Hardware                  | Support ALGE equipment   | Serial / USB / TCP) Tj
+0 -12 Td
+(                          | and varying setup        | adapters + parser rules) Tj
+0 -12 Td
+(Manual Control            | Judges must override     | Full manual arm/start/) Tj
+0 -12 Td
+(                          | hardware when required   | stop/pause/reset/abort) Tj
+0 -12 Td
+(Broadcast                 | Realtime display for     | Overlay routes + desktop) Tj
+0 -12 Td
+(                          | vMix and production      | widget windows) Tj
+0 -12 Td
+(Spectator Access          | Public live scoreboards  | QR-enabled live pages) Tj
+0 -12 Td
+(Reliability               | Operations must continue | Diagnostics + logs +) Tj
+0 -12 Td
+(                          | despite temporary issues | manual fallback) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(PROPOSED SOLUTION OVERVIEW) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(LAYER                     | DESCRIPTION) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Admin Platform            | Event, class, competitor, queue, reports,) Tj
+0 -12 Td
+(                          | branding, settings, user workflows) Tj
+0 -12 Td
+(Judge Panel               | Large-button live timing interface) Tj
+0 -12 Td
+(Timing Engine             | Authoritative reducer-based timing state machine) Tj
+0 -12 Td
+(Hardware Console          | Connection state, logs, parser tests, tutorials) Tj
+0 -12 Td
+(Spectator Layer           | Mobile-friendly live scoreboard with history) Tj
+0 -12 Td
+(Broadcast Layer           | Browser overlay, desktop widget, sponsor widgets) Tj
+0 -36 Td
+(Page 2 of 7) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 2199 >>
+stream
+BT
+/F1 9 Tf
+1 0 0 1 42 800 Tm
+0 g
+(CORE MODULES) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(MODULE                    | DESCRIPTION                    | PRIMARY USERS) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Authentication & Roles    | Access and permission control  | All users) Tj
+0 -12 Td
+(Events & Classes          | Competition structure setup    | Admin) Tj
+0 -12 Td
+(Riders / Horses / Entries | Competitor data management     | Admin) Tj
+0 -12 Td
+(Queue & Run Control       | Start order and progression    | Admin, Judge) Tj
+0 -12 Td
+(Timing Engine             | Warm-up and round timing       | System) Tj
+0 -12 Td
+(Hardware Adapter          | ALGE integration pathways      | System, Operator) Tj
+0 -12 Td
+(Realtime Gateway          | Live state sync                | System) Tj
+0 -12 Td
+(Overlay & Widgets         | Broadcast display surfaces     | Broadcast) Tj
+0 -12 Td
+(Reports & Logs            | Run and audit visibility       | Admin) Tj
+0 -12 Td
+(Settings & Integrations   | App, ALGE, spectator, vMix     | Super Admin) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(FEATURE SCOPE) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(CATEGORY                  | FEATURE                        | INCLUDED) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Competition               | Events, classes, riders,       | Yes) Tj
+0 -12 Td
+(                          | horses, competitors, queue     |) Tj
+0 -12 Td
+(Timing                    | Warm-up, main timer, manual    | Yes) Tj
+0 -12 Td
+(                          | stop, pause, reset, abort      |) Tj
+0 -12 Td
+(History                   | Full run timestamps and trails | Yes) Tj
+0 -12 Td
+(Hardware                  | Mock, serial, TCP, telemetry   | Yes) Tj
+0 -12 Td
+(Broadcast                 | Overlay, widget, vMix-ready    | Yes) Tj
+0 -12 Td
+(Spectator                 | QR scoreboard, history, queue  | Yes) Tj
+0 -12 Td
+(Reports                   | Exports and summaries          | Yes) Tj
+0 -36 Td
+(Page 3 of 7) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 2317 >>
+stream
+BT
+/F1 9 Tf
+1 0 0 1 42 800 Tm
+0 g
+(SYSTEM ARCHITECTURE) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(LAYER                     | COMPONENT                      | RESPONSIBILITY) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Presentation              | Admin Panel                    | Operations control) Tj
+0 -12 Td
+(Presentation              | Judge Panel                    | Live timing control) Tj
+0 -12 Td
+(Presentation              | Spectator Pages                | Public scoreboard) Tj
+0 -12 Td
+(Presentation              | Overlay / Widget               | Broadcast output) Tj
+0 -12 Td
+(Application               | NestJS Backend API             | Business logic) Tj
+0 -12 Td
+(Realtime                  | WebSocket / Socket.IO          | Low-latency updates) Tj
+0 -12 Td
+(Timing                    | Timer Engine Package           | Authoritative timing) Tj
+0 -12 Td
+(Integration               | Hardware Adapter Layer         | ALGE connectivity) Tj
+0 -12 Td
+(Integration               | vMix Service                   | Broadcast integration) Tj
+0 -12 Td
+(Persistence               | PostgreSQL / Redis             | Records and live state) Tj
+0 -12 Td
+(Deployment                | Docker                         | Local/prod deployment) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(HARDWARE & BROADCAST INTEGRATION PLAN) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(AREA                      | METHOD                         | STATUS) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(ALGE Sensors              | Via ALGE timing master         | Supported) Tj
+0 -12 Td
+(ALGE TIMY / TIMY3         | Serial / USB / RS232           | Supported) Tj
+0 -12 Td
+(TCP Bridge                | Configurable TCP adapter       | Supported) Tj
+0 -12 Td
+(Simulator                 | Mock adapter and inject flow   | Supported) Tj
+0 -12 Td
+(vMix Overlay              | Browser route                  | Supported) Tj
+0 -12 Td
+(Desktop Widget            | Native frameless window        | Supported) Tj
+0 -12 Td
+(QR Spectator Pages        | Public share links             | Supported) Tj
+0 -36 Td
+(Page 4 of 7) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 1739 >>
+stream
+BT
+/F1 9 Tf
+1 0 0 1 42 800 Tm
+0 g
+(DEVELOPMENT TIMELINE) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(PHASE                     | DURATION     | TIMELINE       | DELIVERABLES) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Phase 1: Foundation       | 4 days       | Day 1-4        | Repo, schema, env) Tj
+0 -12 Td
+(Phase 2: Timer Engine     | 4 days       | Day 5-8        | Core timing logic) Tj
+0 -12 Td
+(Phase 3: Admin & Data     | 5 days       | Day 9-13       | Events, queue, CSV) Tj
+0 -12 Td
+(Phase 4: Judge & Realtime | 4 days       | Day 14-17      | Judge panel, sync) Tj
+0 -12 Td
+(Phase 5: Hardware         | 5 days       | Day 18-22      | ALGE adapters/logs) Tj
+0 -12 Td
+(Phase 6: Overlay/Widget   | 4 days       | Day 23-26      | Overlay, widgets) Tj
+0 -12 Td
+(Phase 7: Final UX         | 4 days       | Day 27-30      | Super admin polish) Tj
+0 -12 Td
+(Testing & Deployment      | 15 days      | Day 31-45      | QA, UAT, rollout) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(TESTING AND PRODUCTION ROLLOUT PLAN) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(STAGE                     | TIMELINE       | ACTIVITIES) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Functional QA             | Day 31-35      | Workflow and UI validation) Tj
+0 -12 Td
+(Integration QA            | Day 36-39      | ALGE, parser, vMix, LAN) Tj
+0 -12 Td
+(Stabilization             | Day 40-42      | Fixes and hardening) Tj
+0 -12 Td
+(Deployment & UAT          | Day 43-45      | Production rollout, sign-off) Tj
+0 -36 Td
+(Page 5 of 7) Tj
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 2313 >>
+stream
+BT
+/F1 9 Tf
+1 0 0 1 42 800 Tm
+0 g
+(DELIVERABLES) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(ITEM                      | DESCRIPTION) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Application Source Code   | Full monorepo and shared packages) Tj
+0 -12 Td
+(Backend API               | Timing, hardware, overlay, settings modules) Tj
+0 -12 Td
+(Web Frontend              | Admin, judge, spectator, overlay, hardware UI) Tj
+0 -12 Td
+(Hardware Layer            | Mock, serial, and TCP ALGE-ready adapters) Tj
+0 -12 Td
+(Broadcast Assets          | Overlay routes and desktop widgets) Tj
+0 -12 Td
+(Documentation Pack        | Operator, hardware, architecture, vMix guides) Tj
+0 -12 Td
+(Deployment Package        | Docker setup and env templates) Tj
+0 -12 Td
+(Testing Summary           | Verification and readiness notes) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(ASSUMPTIONS, RISKS, AND MITIGATION) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(ITEM                      | TYPE         | DETAILS / MITIGATION) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(ALGE Output Format        | Assumption   | Validate parser rules during) Tj
+0 -12 Td
+(                          |              | commissioning against real output) Tj
+0 -12 Td
+(Production Infrastructure | Assumption   | Client-approved host, DB, Redis) Tj
+0 -12 Td
+(Hardware Disconnect       | Risk         | Diagnostics and manual fallback) Tj
+0 -12 Td
+(vMix Scene Mismatch       | Risk         | Configurable settings and checks) Tj
+0 -12 Td
+(Venue Network Quality     | Risk         | Local-first design and reconnects) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(ACCEPTANCE CRITERIA) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(1. Admin can manage event structure and competitor data) Tj
+0 -12 Td
+(2. Judge can arm and control live runs) Tj
+0 -12 Td
+(3. Hardware triggers correctly start warm-up and main timer) Tj
+0 -12 Td
+(4. History, logs, overlays, widgets, and spectator pages update live) Tj
+0 -12 Td
+(5. Diagnostics and reports are available for operators and admins) Tj
+0 -36 Td
+(Page 6 of 7) Tj
+ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 2271 >>
+stream
+BT
+/F1 9 Tf
+1 0 0 1 42 800 Tm
+0 g
+(COMMERCIAL STRUCTURE) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(COMMERCIAL ITEM           | DETAILS) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Commercial Model          | Fixed project cost or milestone-based contract) Tj
+0 -12 Td
+(Delivery Window           | 45 days including testing and deployment buffer) Tj
+0 -12 Td
+(Change Requests           | Managed through formal approval process) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(SUGGESTED BILLING PLAN) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(MILESTONE                 | PERCENTAGE   | DESCRIPTION) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Milestone 1               | 30%          | Kickoff and architecture setup) Tj
+0 -12 Td
+(Milestone 2               | 40%          | Feature-complete delivery) Tj
+0 -12 Td
+(Milestone 3               | 30%          | Testing, UAT, production rollout) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(WARRANTY AND SUPPORT) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(ITEM                      | DETAILS) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Warranty Period           | To be defined in final commercial agreement) Tj
+0 -12 Td
+(Bug Fix Support           | Included during agreed post-delivery window) Tj
+0 -12 Td
+(Operational Support       | Go-live assistance can be included or quoted) Tj
+0 -12 Td
+(Exclusions                | Third-party hardware/network faults or) Tj
+0 -12 Td
+(                          | unapproved scope changes) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(SIGN-OFF) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(PARTY                     | NAME                | SIGNATURE | DATE) Tj
+0 -12 Td
+(--------------------------------------------------------------------------) Tj
+0 -12 Td
+(Client Representative     |                     |           |) Tj
+0 -12 Td
+(Vendor Representative     |                     |           |) Tj
+0 -36 Td
+(Page 7 of 7) Tj
+ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 14 0 R >>
+endobj
+16 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R] /Count 7 >>
+endobj
+17 0 obj
+<< /Type /Catalog /Pages 16 0 R >>
+endobj
+xref
+0 18
+0000000000 65535 f 
+0000000009 00000 n 
+0000000077 00000 n 
+0000002029 00000 n 
+0000002156 00000 n 
+0000004454 00000 n 
+0000004581 00000 n 
+0000006832 00000 n 
+0000006959 00000 n 
+0000009328 00000 n 
+0000009455 00000 n 
+0000011247 00000 n 
+0000011376 00000 n 
+0000013742 00000 n 
+0000013871 00000 n 
+0000016195 00000 n 
+0000016324 00000 n 
+0000016421 00000 n 
+trailer
+<< /Size 18 /Root 17 0 R >>
+startxref
+16472
+%%EOF

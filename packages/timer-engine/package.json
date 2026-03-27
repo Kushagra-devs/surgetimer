@@ -1,0 +1,10 @@
+{
+  "name": "@horse-timer/timer-engine",
+  "private": true,
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest run --config ../../vitest.config.ts packages/timer-engine/tests"
+  }
+}

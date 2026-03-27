@@ -1,0 +1,225 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  JUDGE
+  OPERATOR
+  VIEWER
+}
+
+model User {
+  id           String     @id @default(uuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  role         UserRole
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  createdEvents Event[]   @relation("EventsCreatedBy")
+  auditLogs    AuditLog[] @relation("AuditActor")
+  runLogs      RunEventLog[]
+}
+
+model Event {
+  id          String             @id @default(uuid())
+  name        String
+  venue       String
+  startDate   DateTime
+  endDate     DateTime
+  timezone    String
+  status      String
+  createdById String
+  createdBy   User               @relation("EventsCreatedBy", fields: [createdById], references: [id])
+  classes     CompetitionClass[]
+  entries     CompetitorEntry[]
+  runs        Run[]
+}
+
+model CompetitionClass {
+  id                  String            @id @default(uuid())
+  eventId             String
+  name                String
+  code                String
+  roundType           String
+  warmupDurationSec   Int
+  maxRoundDurationSec Int
+  sortOrder           Int
+  status              String
+  event               Event             @relation(fields: [eventId], references: [id])
+  entries             CompetitorEntry[]
+  runs                Run[]
+  queueItems          QueueItem[]
+}
+
+model Rider {
+  id             String            @id @default(uuid())
+  firstName      String
+  lastName       String
+  nationality    String?
+  club           String?
+  externalNumber String?
+  entries        CompetitorEntry[]
+}
+
+model Horse {
+  id      String            @id @default(uuid())
+  name    String
+  breed   String?
+  age     Int?
+  sex     String?
+  owner   String?
+  stable  String?
+  notes   String?
+  entries CompetitorEntry[]
+}
+
+model CompetitorEntry {
+  id         String        @id @default(uuid())
+  eventId    String
+  classId    String
+  riderId    String
+  horseId    String
+  bibNumber  String
+  startOrder Int
+  status     String
+  event      Event         @relation(fields: [eventId], references: [id])
+  class      CompetitionClass @relation(fields: [classId], references: [id])
+  rider      Rider         @relation(fields: [riderId], references: [id])
+  horse      Horse         @relation(fields: [horseId], references: [id])
+  runs       Run[]
+  queueItems QueueItem[]
+
+  @@unique([classId, bibNumber])
+  @@unique([classId, startOrder])
+}
+
+model Run {
+  id                 String        @id @default(uuid())
+  eventId            String
+  classId            String
+  competitorEntryId  String
+  state              String
+  armedAt            DateTime?
+  warmupStartedAt    DateTime?
+  warmupEndedAt      DateTime?
+  mainStartedAt      DateTime?
+  mainEndedAt        DateTime?
+  elapsedMs          Int?
+  penalties          String?
+  resultCode         String?
+  manualOverrideUsed Boolean       @default(false)
+  notes              String?
+  event              Event         @relation(fields: [eventId], references: [id])
+  class              CompetitionClass @relation(fields: [classId], references: [id])
+  competitorEntry    CompetitorEntry @relation(fields: [competitorEntryId], references: [id])
+  eventLogs          RunEventLog[]
+}
+
+model RunEventLog {
+  id          String   @id @default(uuid())
+  runId       String
+  type        String
+  payloadJson Json
+  createdAt   DateTime @default(now())
+  createdById String?
+  run         Run      @relation(fields: [runId], references: [id])
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+}
+
+model HardwareLog {
+  id         String   @id @default(uuid())
+  source     String
+  payload    String
+  parsed     Json?
+  status     String
+  receivedAt DateTime
+}
+
+model QueueItem {
+  id                String          @id @default(uuid())
+  classId           String
+  competitorEntryId String
+  position          Int
+  status            String
+  class             CompetitionClass @relation(fields: [classId], references: [id])
+  competitorEntry   CompetitorEntry @relation(fields: [competitorEntryId], references: [id])
+
+  @@unique([classId, position])
+}
+
+model OverlayTheme {
+  id         String   @id @default(uuid())
+  name       String   @unique
+  configJson Json
+}
+
+model IntegrationConfig {
+  id                  String   @id
+  appSettingsJson     Json
+  overlaySettingsJson Json
+  integrationJson     Json
+  updatedAt           DateTime @updatedAt
+  createdAt           DateTime @default(now())
+}
+
+model WidgetConfig {
+  id         String   @id
+  name       String
+  kind       String
+  status     String
+  route      String
+  width      Int
+  height     Int
+  configJson Json
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+}
+
+model RuntimeState {
+  id            String   @id
+  activeClassId String
+  currentIndex  Int
+  snapshotJson  Json
+  runHistoryJson Json
+  currentRunEventsJson Json
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+}
+
+model HardwareDiagnosticLog {
+  id        String   @id @default(uuid())
+  level     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model VmixTelemetryLog {
+  id         String   @id @default(uuid())
+  ok         Boolean
+  url        String
+  reason     String?
+  simulated  Boolean?
+  attempts   Int?
+  statusCode Int?
+  createdAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  actorId    String
+  action     String
+  entityType String
+  entityId   String
+  beforeJson Json?
+  afterJson  Json?
+  createdAt  DateTime @default(now())
+  actor      User     @relation("AuditActor", fields: [actorId], references: [id])
+}

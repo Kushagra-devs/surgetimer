@@ -1,0 +1,39 @@
+{
+  "name": "horse-jumping-timer",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -ws --if-present",
+    "dev": "npm run dev -w @horse-timer/api & npm run dev -w @horse-timer/web",
+    "widget": "npm run start -w @horse-timer/widget",
+    "widget:dev": "npm run dev -w @horse-timer/widget",
+    "test": "npm run test -ws --if-present",
+    "test:runtime": "node scripts/runtime-smoke.mjs",
+    "lint": "npm run lint -ws --if-present",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.53.0",
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "prisma": "^6.6.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
+  },
+  "dependencies": {
+    "@nestjs/platform-socket.io": "^11.1.17",
+    "electron": "^35.2.1",
+    "engine.io": "^6.6.6",
+    "qrcode": "^1.5.4",
+    "react-qr-code": "^2.0.18",
+    "socket.io": "^4.8.3"
+  }
+}

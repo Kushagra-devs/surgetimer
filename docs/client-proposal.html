@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Horse Show Jumping Timer Software Proposal</title>
+    <style>
+      :root {
+        --ink: #172033;
+        --muted: #5d6b82;
+        --line: #d6deea;
+        --panel: #f6f9fc;
+        --brand: #123b7a;
+        --brand-2: #1e5bb8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #fff;
+        line-height: 1.45;
+      }
+
+      .page {
+        page-break-after: always;
+        padding: 38px 42px;
+      }
+
+      .page:last-child {
+        page-break-after: auto;
+      }
+
+      .cover {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: linear-gradient(180deg, #f7fbff 0%, #eef4fb 100%);
+      }
+
+      .cover-band {
+        height: 12px;
+        background: linear-gradient(90deg, var(--brand) 0%, var(--brand-2) 100%);
+        margin: -38px -42px 28px;
+      }
+
+      h1 {
+        font-size: 28px;
+        line-height: 1.2;
+        margin: 0 0 10px;
+        color: #0c2348;
+      }
+
+      h2 {
+        font-size: 18px;
+        margin: 0 0 12px;
+        color: #11356d;
+      }
+
+      h3 {
+        font-size: 14px;
+        margin: 20px 0 8px;
+        color: #11356d;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      p,
+      li {
+        font-size: 11px;
+        margin: 0;
+      }
+
+      .subtitle {
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+
+      .meta-table,
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+      }
+
+      .meta-table td,
+      .data-table th,
+      .data-table td {
+        border: 1px solid var(--line);
+        padding: 8px 10px;
+        vertical-align: top;
+        font-size: 10px;
+      }
+
+      .meta-table td:first-child,
+      .data-table th {
+        background: var(--panel);
+        font-weight: 700;
+      }
+
+      .data-table th {
+        color: #173867;
+        text-align: left;
+      }
+
+      .section {
+        margin-bottom: 24px;
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #eaf1ff;
+        color: #163e7a;
+        font-size: 10px;
+        font-weight: 700;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+
+      .small {
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      .footer-note {
+        margin-top: 18px;
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      ul {
+        margin: 8px 0 0 16px;
+        padding: 0;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      @page {
+        size: A4;
+        margin: 12mm;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page cover">
+      <div>
+        <div class="cover-band"></div>
+        <div class="pill">Formal Project Proposal</div>
+        <h1>Horse Show Jumping Timer Software Proposal</h1>
+        <p class="subtitle">ALGE + vMix Integrated Real-Time Competition Timing, Broadcast, and Spectator Platform</p>
+        <table class="meta-table">
+          <tr><td>Prepared For</td><td>[Client Name / Organization]</td></tr>
+          <tr><td>Prepared By</td><td>[Your Company Name]</td></tr>
+          <tr><td>Proposal Date</td><td>March 28, 2026</td></tr>
+          <tr><td>Document Version</td><td>v1.0</td></tr>
+          <tr><td>Project Duration</td><td>30 days development + 15 days testing and deployment buffer</td></tr>
+        </table>
+      </div>
+      <div>
+        <table class="meta-table">
+          <tr><td>Confidentiality</td><td>This document contains confidential and proprietary information intended solely for project evaluation and approval.</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="section">
+        <h2>1. Executive Summary</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 24%">Topic</th><th>Details</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Project Objective</td><td>Design and deliver a production-oriented horse show jumping timing platform integrated with ALGE hardware, vMix broadcast workflows, spectator live scoreboards, and real-time operational dashboards.</td></tr>
+            <tr><td>Business Need</td><td>Replace fragmented timing and display operations with a stable, server-authoritative software system that supports judges, operators, broadcasters, and spectators from a unified control platform.</td></tr>
+            <tr><td>Primary Outcome</td><td>A reliable competition operations system with live timing, manual override controls, full event history, hardware diagnostics, overlays, desktop widgets, and mobile-friendly spectator views.</td></tr>
+            <tr><td>Delivery Window</td><td>45 calendar days total, consisting of 30 days of focused development followed by 15 days of testing, hardening, production deployment preparation, and user acceptance validation.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>2. Client Requirement Understanding</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 24%">Requirement Area</th><th style="width: 34%">Client Need</th><th>Proposed Response</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Live Timing</td><td>Accurate and stable timing during horse show jumping rounds.</td><td>Server-authoritative timing engine with deterministic state transitions and no client-side drift dependency.</td></tr>
+            <tr><td>ALGE Hardware</td><td>Support ALGE timing hardware and venue-specific wiring/output behavior.</td><td>Configurable serial, USB-serial, and TCP adapter layer with parser-rule based signal interpretation.</td></tr>
+            <tr><td>Manual Control</td><td>Judges must be able to override every hardware action.</td><td>Dedicated judge controls for arm, warm-up start, main start, stop, pause, resume, reset, and abort.</td></tr>
+            <tr><td>Broadcast</td><td>Real-time display for vMix and live event production.</td><td>Browser overlay, desktop widget windows, and future-ready vMix control endpoints.</td></tr>
+            <tr><td>Spectator Visibility</td><td>Allow public or venue viewers to see timer and scoreboard updates live.</td><td>QR-enabled live scoreboard pages with history, status, queue preview, and customizable themes.</td></tr>
+            <tr><td>Reliability</td><td>Software must remain usable even during hardware or UI disruptions.</td><td>Realtime backend state, manual fallback path, diagnostics, logs, and operational recovery workflows.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>3. Proposed Solution Overview</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 24%">Solution Layer</th><th>Description</th><th style="width: 28%">Business Outcome</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Admin Platform</td><td>Event, class, rider, horse, competitor, queue, reporting, branding, and settings management.</td><td>Centralized event operations.</td></tr>
+            <tr><td>Judge Panel</td><td>Live competition timing screen optimized for large-button operation.</td><td>Fast, safe, and clear timing control.</td></tr>
+            <tr><td>Timing Engine</td><td>Reducer-driven server-side timing logic for warm-up and round state transitions.</td><td>Reliable timer behavior.</td></tr>
+            <tr><td>Hardware Console</td><td>Connection state, raw logs, parser tests, diagnostics, and operator tutorials.</td><td>Stronger setup and troubleshooting.</td></tr>
+            <tr><td>Broadcast Layer</td><td>Realtime overlays, desktop widgets, sponsor panels, and vMix-ready routes.</td><td>Professional on-air presentation.</td></tr>
+            <tr><td>Spectator Layer</td><td>Shareable QR-based live scoreboards with history and customizable layouts.</td><td>Audience engagement and visibility.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="section">
+        <h2>4. Core Modules</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 22%">Module</th><th>Description</th><th style="width: 22%">Primary Users</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Authentication & Roles</td><td>User access and permission segmentation for Super Admin, Admin, Judge, Operator, and Viewer roles.</td><td>All users</td></tr>
+            <tr><td>Events & Classes</td><td>Competition structure, class setup, round settings, and operating parameters.</td><td>Admin</td></tr>
+            <tr><td>Riders, Horses, Competitors</td><td>Profile, entry, bib, and class assignment management.</td><td>Admin</td></tr>
+            <tr><td>Queue & Run Control</td><td>Start order, competitor progression, and run execution.</td><td>Admin, Judge</td></tr>
+            <tr><td>Timing Engine</td><td>Warm-up countdown, round timer, pause/resume, stop, and completion logic.</td><td>System</td></tr>
+            <tr><td>Hardware Adapter</td><td>ALGE mock, serial, and TCP integration pathways.</td><td>System, Operator</td></tr>
+            <tr><td>Realtime Gateway</td><td>Live state synchronization across UI, overlays, widgets, and spectator views.</td><td>System</td></tr>
+            <tr><td>Overlay & Widgets</td><td>Broadcast display surfaces for vMix and desktop capture.</td><td>Broadcast Team</td></tr>
+            <tr><td>Reports & Logs</td><td>Run history, exports, hardware logs, audit history, and operational summaries.</td><td>Admin, Super Admin</td></tr>
+            <tr><td>Settings & Integrations</td><td>Application, branding, spectator, ALGE, and vMix configuration.</td><td>Super Admin</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>5. Feature Scope</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 18%">Category</th><th style="width: 44%">Feature</th><th style="width: 18%">Included</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Competition</td><td>Events, classes, riders, horses, competitors, queue, CSV imports</td><td>Yes</td><td>Admin workflow included</td></tr>
+            <tr><td>Timing</td><td>Warm-up countdown, round count-up, finish, pause, manual override, reset, abort</td><td>Yes</td><td>Server-authoritative logic</td></tr>
+            <tr><td>History</td><td>Full run event history with timestamps</td><td>Yes</td><td>Live and completed history views</td></tr>
+            <tr><td>Hardware</td><td>Mock, serial, TCP, parser rules, diagnostics, telemetry, raw logs</td><td>Yes</td><td>ALGE integration-ready</td></tr>
+            <tr><td>Broadcast</td><td>Overlay route, native widget, multi-widget support, branding</td><td>Yes</td><td>vMix-ready browser output</td></tr>
+            <tr><td>Spectator</td><td>Live scoreboard, QR access, queue preview, history, theme controls</td><td>Yes</td><td>Mobile and venue-ready</td></tr>
+            <tr><td>Administration</td><td>Super Admin console, integration settings, widget manager, tutorial panels</td><td>Yes</td><td>Segmented by usage area</td></tr>
+            <tr><td>Reporting</td><td>Run summaries, log exports, operational views</td><td>Yes</td><td>CSV/report workflow included</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="section">
+        <h2>6. System Architecture</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 20%">Layer</th><th style="width: 25%">Component</th><th>Responsibility</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Presentation</td><td>Admin Panel</td><td>Operations, settings, reporting, widgets, user workflows.</td></tr>
+            <tr><td>Presentation</td><td>Judge Panel</td><td>Live run control for judges and operators.</td></tr>
+            <tr><td>Presentation</td><td>Spectator Pages</td><td>Public-facing live scoreboard, timer, and run history.</td></tr>
+            <tr><td>Presentation</td><td>Overlay & Desktop Widget</td><td>Broadcast-ready outputs for vMix and direct screen capture.</td></tr>
+            <tr><td>Application</td><td>NestJS Backend API</td><td>Business logic, timing services, integration APIs, health and diagnostics.</td></tr>
+            <tr><td>Realtime</td><td>WebSocket / Socket.IO</td><td>Low-latency updates across all connected clients.</td></tr>
+            <tr><td>Timing</td><td>Timer Engine Package</td><td>Deterministic timing transitions and elapsed time calculation.</td></tr>
+            <tr><td>Integration</td><td>Hardware Adapter Layer</td><td>Mock, serial, USB-serial, and TCP hardware connectivity.</td></tr>
+            <tr><td>Integration</td><td>vMix Service</td><td>Overlay integration and future automation pathways.</td></tr>
+            <tr><td>Persistence</td><td>PostgreSQL / Redis</td><td>Persistent records, live state recovery, locks, and pub/sub.</td></tr>
+            <tr><td>Deployment</td><td>Docker</td><td>Local-first and production deployment support.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>7. Hardware and Broadcast Integration Plan</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 24%">Integration Area</th><th style="width: 28%">Method</th><th>Purpose</th><th>Status in Scope</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ALGE Photocells / Sensors</td><td>Via ALGE timing master device</td><td>Trigger generation for warm-up, round, and finish actions.</td><td>Supported</td></tr>
+            <tr><td>ALGE TIMY / TIMY3</td><td>Serial / USB / RS232 communication</td><td>Primary PC integration path for venue timing master.</td><td>Supported</td></tr>
+            <tr><td>TCP Bridge</td><td>Configurable TCP adapter</td><td>Support for bridged or network-connected timing output.</td><td>Supported</td></tr>
+            <tr><td>Simulator Mode</td><td>Mock adapter and test injection</td><td>Training, testing, and demo use without physical hardware.</td><td>Supported</td></tr>
+            <tr><td>Broadcast Overlay</td><td>Browser route for vMix</td><td>On-air timer and score display.</td><td>Supported</td></tr>
+            <tr><td>Desktop Widget</td><td>Native frameless desktop window</td><td>Movable output for capture and display workflows.</td><td>Supported</td></tr>
+            <tr><td>Spectator QR Flow</td><td>Public scoreboard URLs and QR generation</td><td>Audience access to live timing and history.</td><td>Supported</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="section">
+        <h2>8. Development Timeline</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 20%">Phase</th><th style="width: 16%">Duration</th><th style="width: 20%">Timeline</th><th>Key Deliverables</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Phase 1: Foundation & Setup</td><td>4 days</td><td>Day 1 to Day 4</td><td>Architecture baseline, monorepo setup, schema, environment setup, deployment skeleton.</td></tr>
+            <tr><td>Phase 2: Core Timing Engine</td><td>4 days</td><td>Day 5 to Day 8</td><td>Timer state machine, debounce handling, timing tests, manual override logic.</td></tr>
+            <tr><td>Phase 3: Admin & Competition Data</td><td>5 days</td><td>Day 9 to Day 13</td><td>Events, classes, competitors, CSV import, queue baseline, reports foundation.</td></tr>
+            <tr><td>Phase 4: Judge & Realtime Operations</td><td>4 days</td><td>Day 14 to Day 17</td><td>Judge panel, active run control, realtime synchronization, history timeline.</td></tr>
+            <tr><td>Phase 5: Hardware Integration</td><td>5 days</td><td>Day 18 to Day 22</td><td>Mock/serial/TCP adapters, parser rules, diagnostics, hardware console.</td></tr>
+            <tr><td>Phase 6: Overlay, Widgets & Spectator</td><td>4 days</td><td>Day 23 to Day 26</td><td>Broadcast overlay, widget system, spectator live scoreboard, QR flow, vMix readiness.</td></tr>
+            <tr><td>Phase 7: Final UX & Admin Hardening</td><td>4 days</td><td>Day 27 to Day 30</td><td>Super Admin segmentation, branding controls, workflow polish, documentation.</td></tr>
+            <tr><td>Testing & Deployment Buffer</td><td>15 days</td><td>Day 31 to Day 45</td><td>QA, integration validation, fixes, deployment prep, UAT, production rollout.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>9. Testing and Production Rollout Plan</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 24%">Stage</th><th style="width: 22%">Timeline</th><th>Activities</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Functional QA</td><td>Day 31 to Day 35</td><td>Admin workflow testing, timer flow validation, widget behavior, spectator view, exports, logs, and operator journeys.</td></tr>
+            <tr><td>Integration QA</td><td>Day 36 to Day 39</td><td>ALGE signal validation, parser testing, hardware reconnect behavior, vMix readiness, LAN checks, and spectator QR trials.</td></tr>
+            <tr><td>Stabilization & Fixes</td><td>Day 40 to Day 42</td><td>Performance cleanup, UI refinements, resilience hardening, issue fixes, and pre-go-live validation.</td></tr>
+            <tr><td>Production Deployment & UAT</td><td>Day 43 to Day 45</td><td>Production configuration, migration, deployment, staff handover, user acceptance testing, and final sign-off.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="section">
+        <h2>10. Deliverables</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 24%">Deliverable</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Application Source Code</td><td>Complete monorepo source for backend, frontend, timing engine, shared types, adapters, and widget system.</td></tr>
+            <tr><td>Backend API</td><td>NestJS-based real-time API with timing, hardware, overlay, reports, and settings modules.</td></tr>
+            <tr><td>Web Interface</td><td>Admin panel, judge control panel, spectator pages, overlay routes, hardware console, and super admin interface.</td></tr>
+            <tr><td>Hardware Integration Layer</td><td>Mock, serial, TCP adapters and configurable parser pipeline for ALGE timing connectivity.</td></tr>
+            <tr><td>Broadcast Assets</td><td>Overlay routes, widget configuration system, and desktop widget launcher.</td></tr>
+            <tr><td>Documentation Pack</td><td>Architecture guide, hardware setup guide, operator guide, vMix guide, and deployment reference.</td></tr>
+            <tr><td>Deployment Package</td><td>Docker configuration, environment templates, and startup instructions.</td></tr>
+            <tr><td>Testing Summary</td><td>Verification notes, functional test coverage, runtime readiness findings, and deployment checklist.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>11. Assumptions, Risks, and Mitigation</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 24%">Item</th><th style="width: 20%">Type</th><th>Details / Mitigation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ALGE Output Format</td><td>Assumption</td><td>Final protocol mapping may vary by exact model and venue setup; parser rules will be validated during commissioning.</td></tr>
+            <tr><td>Production Infrastructure</td><td>Assumption</td><td>Client will provide or approve production host, Postgres, Redis, and local network access as required.</td></tr>
+            <tr><td>Hardware Disconnect</td><td>Risk</td><td>System includes diagnostics, visible alarms, logs, and full manual override to continue operations safely.</td></tr>
+            <tr><td>vMix Scene Mismatch</td><td>Risk</td><td>Use configurable input names and pre-event scene validation before final live operation.</td></tr>
+            <tr><td>Venue Network Quality</td><td>Risk</td><td>Use local-first deployment, reconnect logic, and direct LAN links for spectator and production systems.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>12. Acceptance Criteria</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 8%">No.</th><th style="width: 42%">Acceptance Item</th><th>Success Condition</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Event and class management</td><td>Admin can create and manage event structure and competition classes.</td></tr>
+            <tr><td>2</td><td>Competitor workflow</td><td>Riders, horses, and competitors can be created/imported and queued.</td></tr>
+            <tr><td>3</td><td>Judge timing control</td><td>Judge can arm, start, stop, pause, reset, and abort as required.</td></tr>
+            <tr><td>4</td><td>Hardware timing flow</td><td>Valid ALGE triggers start warm-up and main timer correctly.</td></tr>
+            <tr><td>5</td><td>Run persistence</td><td>Run history, timestamps, and logs are stored and visible in the UI.</td></tr>
+            <tr><td>6</td><td>Realtime updates</td><td>Overlay, widget, and spectator views update in real time.</td></tr>
+            <tr><td>7</td><td>Diagnostics</td><td>Hardware connection and logs are visible to operators and admins.</td></tr>
+            <tr><td>8</td><td>Broadcast readiness</td><td>vMix-ready overlay routes and widget outputs function correctly.</td></tr>
+            <tr><td>9</td><td>Spectator access</td><td>QR-linked scoreboards open and show timer, scorecard, and history.</td></tr>
+            <tr><td>10</td><td>Production rollout</td><td>Deployment package and operational guidance are ready for go-live use.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="section">
+        <h2>13. Commercial Structure</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 24%">Commercial Item</th><th>Details</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Commercial Model</td><td>Fixed project cost or milestone-based commercial structure, to be finalized after approval.</td></tr>
+            <tr><td>Total Delivery Window</td><td>45 days including development, QA, testing buffer, and deployment readiness.</td></tr>
+            <tr><td>Suggested Billing Structure</td><td>Kickoff milestone, feature-completion milestone, and final deployment/UAT milestone.</td></tr>
+            <tr><td>Change Requests</td><td>Any material scope additions after approval may be handled through a formal change request.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Suggested Milestone Billing</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 48%">Milestone</th><th style="width: 18%">Suggested %</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Milestone 1: Project Kickoff</td><td>30%</td><td>Architecture setup, environment baseline, and project initiation.</td></tr>
+            <tr><td>Milestone 2: Feature Completion</td><td>40%</td><td>Core module delivery and feature-complete application state.</td></tr>
+            <tr><td>Milestone 3: Testing and Go-Live Readiness</td><td>30%</td><td>Testing, deployment readiness, UAT, and production handover.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>14. Warranty and Support</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 24%">Support Item</th><th>Details</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Warranty Period</td><td>[To be defined in commercial agreement]</td></tr>
+            <tr><td>Bug Fix Support</td><td>Coverage for identified application defects during the agreed post-delivery window.</td></tr>
+            <tr><td>Operational Support</td><td>Initial go-live and handover guidance can be included or quoted separately.</td></tr>
+            <tr><td>Exclusions</td><td>Third-party hardware faults, venue network issues, or unapproved change requests are outside standard warranty unless otherwise agreed.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>15. Sign-Off</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th style="width: 25%">Party</th><th style="width: 25%">Name</th><th style="width: 20%">Designation</th><th style="width: 15%">Signature</th><th>Date</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Client Representative</td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Vendor Representative</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <p class="footer-note">Prepared as a formal client-facing proposal structure for presentation, review, approval, and PDF submission.</p>
+      </div>
+    </section>
+  </body>
+</html>
