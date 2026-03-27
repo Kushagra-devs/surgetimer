@@ -3,6 +3,23 @@ import { TimerState, type OverlayView, type PublicLiveFeed } from '@horse-timer/
 import { demoStore } from '../common/demo-store';
 import { TimingService } from '../timing/timing.service';
 
+function sanitizePublicBaseUrl(value?: string | null) {
+  if (!value) {
+    return 'https://surgetimer.vercel.app';
+  }
+
+  if (
+    value.includes('localhost')
+    || value.includes('127.0.0.1')
+    || value.includes('192.168.')
+    || value.includes('surgetimer.local')
+  ) {
+    return 'https://surgetimer.vercel.app';
+  }
+
+  return value.replace(/\/$/, '');
+}
+
 @Injectable()
 export class OverlayService {
   constructor(@Inject(TimingService) private readonly timingService: TimingService) {}
@@ -68,7 +85,7 @@ export class OverlayService {
     const resolvedEventId = options?.eventId ?? resolvedClass?.eventId ?? demoStore.events[0]?.id;
     const resolvedEvent = demoStore.events.find((item) => item.id === resolvedEventId) ?? demoStore.events[0];
     const query = spectator.requireToken ? `?token=${encodeURIComponent(spectator.shareToken)}` : '';
-    const shareBase = spectator.publicBaseUrl || process.env.PUBLIC_WEB_BASE_URL || 'https://surgetimer.vercel.app';
+    const shareBase = sanitizePublicBaseUrl(spectator.publicBaseUrl || process.env.PUBLIC_WEB_BASE_URL || 'https://surgetimer.vercel.app');
     const shareUrl = `${shareBase}/live/${resolvedEventId}/${resolvedClassId}${query}`;
 
     if (spectator.requireToken && options?.token !== spectator.shareToken) {

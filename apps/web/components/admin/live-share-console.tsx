@@ -1,12 +1,29 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { apiGet, apiPost } from '../../lib/api';
 import { DEFAULT_PUBLIC_WEB_BASE_URL } from '../../lib/runtime-config';
 import type { PublicLiveFeed } from '@horse-timer/types';
 
 const DEFAULT_SHARE_URL = `${DEFAULT_PUBLIC_WEB_BASE_URL}/live`;
+
+function sanitizePublicUrl(value?: string | null) {
+  if (!value) {
+    return DEFAULT_PUBLIC_WEB_BASE_URL;
+  }
+
+  if (
+    value.includes('localhost')
+    || value.includes('127.0.0.1')
+    || value.includes('192.168.')
+    || value.includes('surgetimer.local')
+  ) {
+    return DEFAULT_PUBLIC_WEB_BASE_URL;
+  }
+
+  return value.replace(/\/$/, '');
+}
 
 export function LiveShareConsole() {
   const [feed, setFeed] = useState<PublicLiveFeed | null>(null);
@@ -17,6 +34,8 @@ export function LiveShareConsole() {
   const [mobileCodeExpiresAt, setMobileCodeExpiresAt] = useState<string | null>(null);
   const [mobileMessage, setMobileMessage] = useState('');
   const [mobileBusy, setMobileBusy] = useState(false);
+  const spectatorQrRef = useRef<HTMLDivElement | null>(null);
+  const controlQrRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -39,8 +58,14 @@ export function LiveShareConsole() {
     };
   }, []);
 
-  const shareUrl = feed?.shareUrl ?? DEFAULT_SHARE_URL;
-  const mobileControlBaseUrl = `${DEFAULT_PUBLIC_WEB_BASE_URL}/mobile-control`;
+  const publicBaseUrl = sanitizePublicUrl(feed?.spectator?.publicBaseUrl);
+  const shareQuery = feed?.spectator.requireToken ? `?token=${encodeURIComponent(feed?.spectator.shareToken ?? '')}` : '';
+  const shareUrl = feed?.eventId && feed?.classId
+    ? `${publicBaseUrl}/live/${feed.eventId}/${feed.classId}${shareQuery}`
+    : feed?.shareUrl
+      ? sanitizePublicUrl(feed.shareUrl).replace(/\/live$/, '/live')
+      : DEFAULT_SHARE_URL;
+  const mobileControlBaseUrl = `${publicBaseUrl}/mobile-control`;
   const mobileControlUrl = mobileCode ? `${mobileControlBaseUrl}?code=${encodeURIComponent(mobileCode)}` : mobileControlBaseUrl;
   const currentSummary = useMemo(() => {
     const overlay = feed?.overlay;
@@ -60,6 +85,24 @@ export function LiveShareConsole() {
     await navigator.clipboard.writeText(mobileControlUrl);
     setControlCopied(true);
     window.setTimeout(() => setControlCopied(false), 1600);
+  }
+
+  function downloadQr(ref: React.RefObject<HTMLDivElement | null>, fileName: string) {
+    const svg = ref.current?.querySelector('svg');
+    if (!svg) {
+      return;
+    }
+
+    const serialized = new XMLSerializer().serializeToString(svg);
+    const blob = new Blob([serialized], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 
   async function generateMobileCode() {
@@ -168,16 +211,22 @@ export function LiveShareConsole() {
         </div>
         <div className="share-qr-grid">
           <div className="qr-card">
-            <div className="qr-shell">
+            <div className="qr-shell" ref={spectatorQrRef}>
               <QRCode value={shareUrl} size={180} bgColor="#ffffff" fgColor="#0f172a" />
             </div>
             <p className="qr-caption">Scan for spectator scoreboard.</p>
+            <button className="action-button" onClick={() => downloadQr(spectatorQrRef, 'surgetimer-spectator-qr.svg')}>
+              Download Spectator QR
+            </button>
           </div>
           <div className="qr-card">
-            <div className="qr-shell">
+            <div className="qr-shell" ref={controlQrRef}>
               <QRCode value={mobileControlUrl} size={180} bgColor="#ffffff" fgColor="#0f172a" />
             </div>
             <p className="qr-caption">Scan for protected mobile timer control on the same LAN.</p>
+            <button className="action-button" onClick={() => downloadQr(controlQrRef, 'surgetimer-mobile-control-qr.svg')}>
+              Download Control QR
+            </button>
           </div>
         </div>
       </div>
