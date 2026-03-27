@@ -8,6 +8,8 @@
   ],
   "scripts": {
     "build": "npm run build -ws --if-present",
+    "build:web": "npm run build -w @horse-timer/web",
+    "vercel-build": "npm run build:web",
     "dev": "npm run dev -w @horse-timer/api & npm run dev -w @horse-timer/web",
     "widget": "npm run start -w @horse-timer/widget",
     "widget:dev": "npm run dev -w @horse-timer/widget",

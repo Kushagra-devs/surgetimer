@@ -38,11 +38,19 @@ Recommended backend targets:
 ## Suggested Vercel setup
 
 1. Import the GitHub repository.
-2. Set the root directory to `apps/web`.
+2. Prefer setting the root directory to `apps/web`.
 3. Keep the framework as `Next.js`.
 4. Leave the output directory empty.
 5. Add `NEXT_PUBLIC_API_BASE_URL`.
 6. Deploy.
+
+If the project is imported from the repository root, the repo now also provides:
+
+- root `vercel.json`
+- root `vercel-build` script
+- frontend-scoped `apps/web/vercel.json`
+
+This helps Vercel detect and build the Next.js frontend more reliably from a monorepo.
 
 ## Verification after deploy
 
