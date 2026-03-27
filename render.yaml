@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: surgetimer-api
+    runtime: node
+    rootDir: .
+    buildCommand: npm install && npm run build -w @horse-timer/api
+    startCommand: npm run start -w @horse-timer/api
+    healthCheckPath: /health/live
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_PORT
+        value: "4000"
+      - key: HARDWARE_ADAPTER_MODE
+        value: mock
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: REFRESH_TOKEN_SECRET
+        sync: false
