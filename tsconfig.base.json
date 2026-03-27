@@ -7,19 +7,6 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@horse-timer/types": [
-        "packages/types/src"
-      ],
-      "@horse-timer/timer-engine": [
-        "packages/timer-engine/src"
-      ],
-      "@horse-timer/hardware-adapters": [
-        "packages/hardware-adapters/src"
-      ]
-    }
+    "resolveJsonModule": true
   }
 }
-
