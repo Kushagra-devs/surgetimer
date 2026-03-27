@@ -34,8 +34,15 @@ export function LiveShareConsole() {
   const [mobileCodeExpiresAt, setMobileCodeExpiresAt] = useState<string | null>(null);
   const [mobileMessage, setMobileMessage] = useState('');
   const [mobileBusy, setMobileBusy] = useState(false);
+  const [browserOrigin, setBrowserOrigin] = useState('');
   const spectatorQrRef = useRef<HTMLDivElement | null>(null);
   const controlQrRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setBrowserOrigin(window.location.origin.replace(/\/$/, ''));
+    }
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -58,7 +65,7 @@ export function LiveShareConsole() {
     };
   }, []);
 
-  const publicBaseUrl = sanitizePublicUrl(feed?.spectator?.publicBaseUrl);
+  const publicBaseUrl = sanitizePublicUrl(browserOrigin || feed?.spectator?.publicBaseUrl);
   const shareQuery = feed?.spectator.requireToken ? `?token=${encodeURIComponent(feed?.spectator.shareToken ?? '')}` : '';
   const shareUrl = feed?.eventId && feed?.classId
     ? `${publicBaseUrl}/live/${feed.eventId}/${feed.classId}${shareQuery}`

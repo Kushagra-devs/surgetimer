@@ -5,6 +5,23 @@ import { RuntimeStateService } from '../persistence/runtime-state.service';
 import { TimerState } from '@horse-timer/types';
 import { SettingsPersistenceService } from './settings.persistence';
 
+function sanitizePublicBaseUrl(value?: string | null) {
+  if (!value) {
+    return 'https://surgetimer.vercel.app';
+  }
+
+  if (
+    value.includes('localhost')
+    || value.includes('127.0.0.1')
+    || value.includes('192.168.')
+    || value.includes('surgetimer.local')
+  ) {
+    return 'https://surgetimer.vercel.app';
+  }
+
+  return value.replace(/\/$/, '');
+}
+
 @Injectable()
 export class SettingsService implements OnModuleInit {
   constructor(
@@ -67,6 +84,7 @@ export class SettingsService implements OnModuleInit {
       spectator: {
         ...demoStore.settings.spectator,
         ...body,
+        publicBaseUrl: sanitizePublicBaseUrl(body.publicBaseUrl ?? demoStore.settings.spectator.publicBaseUrl),
       },
     };
     await this.persistBundle();
