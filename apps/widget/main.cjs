@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu, globalShortcut, shell, screen } = require('electron');
 
-const DEFAULT_URL = process.env.WIDGET_URL || 'http://localhost:3001/overlay/widget?desktop=1';
+const DEFAULT_URL = process.env.WIDGET_URL || 'https://surgetimer.vercel.app/overlay/widget?desktop=1';
 const DEFAULT_WIDTH = Number(process.env.WIDGET_WIDTH || 760);
 const DEFAULT_HEIGHT = Number(process.env.WIDGET_HEIGHT || 280);
 

@@ -199,7 +199,7 @@ export const demoStore = {
       siteLabel: 'Surge Arena Control Room',
       applianceName: 'SurgeTimer Venue Node',
       localHostname: 'surgetimer.local',
-      localBaseUrl: 'http://192.168.1.6:3001',
+      localBaseUrl: 'https://surgetimer.vercel.app',
       enforceLanOnly: true,
       cacheCriticalRoutes: true,
       autoReconnectHardware: true,
@@ -237,7 +237,7 @@ export const demoStore = {
     },
     spectator: {
       enabled: true,
-      publicBaseUrl: 'http://localhost:3001',
+      publicBaseUrl: 'https://surgetimer.vercel.app',
       requireToken: false,
       shareToken: 'surge-live-2026',
       title: 'Live Arena Scoreboard',

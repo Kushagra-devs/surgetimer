@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { apiGet, apiPost } from '../../lib/api';
+import { DEFAULT_PUBLIC_WEB_BASE_URL } from '../../lib/runtime-config';
 import type { PublicLiveFeed } from '@horse-timer/types';
 
-const DEFAULT_SHARE_URL = `${process.env.NEXT_PUBLIC_PUBLIC_BASE_URL ?? 'http://localhost:3001'}/live`;
+const DEFAULT_SHARE_URL = `${DEFAULT_PUBLIC_WEB_BASE_URL}/live`;
 
 export function LiveShareConsole() {
   const [feed, setFeed] = useState<PublicLiveFeed | null>(null);
@@ -39,7 +40,7 @@ export function LiveShareConsole() {
   }, []);
 
   const shareUrl = feed?.shareUrl ?? DEFAULT_SHARE_URL;
-  const mobileControlBaseUrl = `${process.env.NEXT_PUBLIC_PUBLIC_BASE_URL ?? 'http://localhost:3001'}/mobile-control`;
+  const mobileControlBaseUrl = `${DEFAULT_PUBLIC_WEB_BASE_URL}/mobile-control`;
   const mobileControlUrl = mobileCode ? `${mobileControlBaseUrl}?code=${encodeURIComponent(mobileCode)}` : mobileControlBaseUrl;
   const currentSummary = useMemo(() => {
     const overlay = feed?.overlay;

@@ -38,7 +38,8 @@ export class WidgetLauncherService {
       };
     }
 
-    const url = new URL('http://localhost:3001/overlay/widget');
+    const publicBaseUrl = process.env.PUBLIC_WEB_BASE_URL || 'https://surgetimer.vercel.app';
+    const url = new URL(`${publicBaseUrl.replace(/\/$/, '')}/overlay/widget`);
     url.searchParams.set('desktop', '1');
     if (options.widgetId) {
       url.searchParams.set('widget', options.widgetId);

@@ -68,7 +68,7 @@ export class OverlayService {
     const resolvedEventId = options?.eventId ?? resolvedClass?.eventId ?? demoStore.events[0]?.id;
     const resolvedEvent = demoStore.events.find((item) => item.id === resolvedEventId) ?? demoStore.events[0];
     const query = spectator.requireToken ? `?token=${encodeURIComponent(spectator.shareToken)}` : '';
-    const shareBase = spectator.publicBaseUrl || process.env.PUBLIC_WEB_BASE_URL || 'http://localhost:3001';
+    const shareBase = spectator.publicBaseUrl || process.env.PUBLIC_WEB_BASE_URL || 'https://surgetimer.vercel.app';
     const shareUrl = `${shareBase}/live/${resolvedEventId}/${resolvedClassId}${query}`;
 
     if (spectator.requireToken && options?.token !== spectator.shareToken) {

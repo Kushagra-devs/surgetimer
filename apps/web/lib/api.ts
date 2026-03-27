@@ -1,4 +1,6 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:4000';
+import { DEFAULT_PUBLIC_API_BASE_URL } from './runtime-config';
+
+const API_BASE = DEFAULT_PUBLIC_API_BASE_URL;
 const API_TIMEOUT_MS = 8000;
 
 async function request<T>(path: string, init: RequestInit): Promise<T> {

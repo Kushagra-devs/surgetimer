@@ -3,11 +3,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { apiGet, apiPost } from '../../lib/api';
+import { DEFAULT_PUBLIC_WEB_BASE_URL } from '../../lib/runtime-config';
 import type { PublicLiveFeed, SpectatorSettings } from '@horse-timer/types';
 
 const defaultSettings: SpectatorSettings = {
   enabled: true,
-  publicBaseUrl: 'http://localhost:3001',
+  publicBaseUrl: DEFAULT_PUBLIC_WEB_BASE_URL,
   requireToken: false,
   shareToken: 'surge-live-2026',
   title: 'Live Arena Scoreboard',
@@ -42,7 +43,7 @@ export function SpectatorSettingsConsole() {
   }, []);
 
   const previewUrl = useMemo(() => {
-    const base = settings.publicBaseUrl || 'http://localhost:3001';
+    const base = settings.publicBaseUrl || DEFAULT_PUBLIC_WEB_BASE_URL;
     const query = settings.requireToken ? `?token=${encodeURIComponent(settings.shareToken)}` : '';
     return `${base}/live/event-demo/class-demo${query}`;
   }, [settings.publicBaseUrl, settings.requireToken, settings.shareToken]);

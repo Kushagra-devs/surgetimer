@@ -242,17 +242,25 @@ export class VmixService implements OnModuleInit {
   }
 
   private getWebBaseUrl() {
-    return this.settingsService.getAppSettings().deployment.localBaseUrl || 'http://localhost:3001';
+    return process.env.PUBLIC_WEB_BASE_URL
+      || this.settingsService.getAppSettings().deployment.localBaseUrl
+      || 'https://surgetimer.vercel.app';
   }
 
   private getApiBaseUrl() {
+    if (process.env.PUBLIC_API_BASE_URL) {
+      return process.env.PUBLIC_API_BASE_URL.replace(/\/$/, '');
+    }
+
     const webBase = this.getWebBaseUrl();
     try {
       const url = new URL(webBase);
-      url.port = '4000';
+      url.protocol = 'https:';
+      url.hostname = 'surgetimer-api.onrender.com';
+      url.port = '';
       return url.toString().replace(/\/$/, '');
     } catch {
-      return 'http://localhost:4000';
+      return 'https://surgetimer-api.onrender.com';
     }
   }
 
