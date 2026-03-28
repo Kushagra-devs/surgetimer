@@ -99,15 +99,32 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
       ? window.location.origin.replace(/\/$/, '')
       : DEFAULT_PUBLIC_WEB_BASE_URL;
 
-  function openWidgetWindow(widgetRoute?: string, dimensions?: { width?: number; height?: number }) {
+  function buildWidgetUrl(widgetRoute?: string) {
     const fallbackRoute = '/overlay/widget';
     const route = widgetRoute ?? fallbackRoute;
-    const targetUrl = route.startsWith('http')
+    return route.startsWith('http')
       ? route
       : `${hostedWidgetBase}${route.startsWith('/') ? route : `/${route}`}`;
+  }
+
+  function openWidgetWindow(widgetRoute?: string, dimensions?: { width?: number; height?: number }) {
+    const targetUrl = buildWidgetUrl(widgetRoute);
     const width = Math.max(520, dimensions?.width ?? 900);
     const height = Math.max(260, dimensions?.height ?? 420);
     window.open(targetUrl, '_blank', `popup=yes,resizable=yes,width=${width},height=${height}`);
+  }
+
+  function buildDesktopProtocolUrl(widgetRoute?: string, dimensions?: { width?: number; height?: number }) {
+    const launchUrl = new URL('surgetimer-widget://launch');
+    launchUrl.searchParams.set('url', buildWidgetUrl(widgetRoute));
+    launchUrl.searchParams.set('width', String(Math.max(520, dimensions?.width ?? 900)));
+    launchUrl.searchParams.set('height', String(Math.max(260, dimensions?.height ?? 420)));
+    return launchUrl.toString();
+  }
+
+  function requestDesktopLaunch(widgetRoute?: string, dimensions?: { width?: number; height?: number }) {
+    const launchUrl = buildDesktopProtocolUrl(widgetRoute, dimensions);
+    window.location.href = launchUrl;
   }
 
   function isHostedEnvironment() {
@@ -144,8 +161,8 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
     try {
       const widget = widgets.find((item) => item.id === id);
       if (isHostedEnvironment()) {
-        openWidgetWindow(widget?.route, { width: widget?.width, height: widget?.height });
-        setLauncherMessage('Widget opened in a dedicated browser window. Native desktop launch is available only on local/self-hosted installs.');
+        requestDesktopLaunch(widget?.route, { width: widget?.width, height: widget?.height });
+        setLauncherMessage('Desktop launch signal sent. If the SurgeTimer Widget app is installed on this machine, it should open immediately.');
         return;
       }
 
@@ -165,8 +182,8 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
     setLauncherState('launching');
     try {
       if (isHostedEnvironment()) {
-        openWidgetWindow('/overlay/widget?desktop=1');
-        setLauncherMessage('Default widget opened in a dedicated browser window. Native desktop launch is available only on local/self-hosted installs.');
+        requestDesktopLaunch('/overlay/widget?desktop=1');
+        setLauncherMessage('Desktop launch signal sent. If the SurgeTimer Widget app is installed on this machine, it should open immediately.');
         return;
       }
 
@@ -224,7 +241,7 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
           </div>
           <div className="tip-card">
             <p className="tip-title">Desktop launch</p>
-            <p className="tip-copy">Each widget exposes its own route so it can be opened directly in the browser or captured inside vMix.</p>
+            <p className="tip-copy">Use browser open for web capture, or install and run the local SurgeTimer Widget app once so this page can trigger native desktop launch.</p>
           </div>
         </div>
         <div className="button-grid" style={{ marginTop: 18 }}>
