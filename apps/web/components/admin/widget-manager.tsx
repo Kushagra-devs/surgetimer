@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { apiDelete, apiGet, apiPatch, apiPost } from '../../lib/api';
+import { DEFAULT_PUBLIC_WEB_BASE_URL } from '../../lib/runtime-config';
 import type { WidgetDefinition, WidgetKind, WidgetStatus } from '@horse-timer/types';
 
 const blankWidget: Partial<WidgetDefinition> = {
@@ -93,6 +94,29 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
     return widgets;
   }, [focus, widgets]);
   const previewWidget = useMemo(() => buildPreviewWidget(draft, editingId), [draft, editingId]);
+  const hostedWidgetBase =
+    typeof window !== 'undefined'
+      ? window.location.origin.replace(/\/$/, '')
+      : DEFAULT_PUBLIC_WEB_BASE_URL;
+
+  function openWidgetWindow(widgetRoute?: string, dimensions?: { width?: number; height?: number }) {
+    const fallbackRoute = '/overlay/widget';
+    const route = widgetRoute ?? fallbackRoute;
+    const targetUrl = route.startsWith('http')
+      ? route
+      : `${hostedWidgetBase}${route.startsWith('/') ? route : `/${route}`}`;
+    const width = Math.max(520, dimensions?.width ?? 900);
+    const height = Math.max(260, dimensions?.height ?? 420);
+    window.open(targetUrl, '_blank', `popup=yes,resizable=yes,width=${width},height=${height}`);
+  }
+
+  function isHostedEnvironment() {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+    const host = window.location.hostname;
+    return !(host === 'localhost' || host === '127.0.0.1');
+  }
 
   async function saveWidget() {
     if (editingId) {
@@ -118,8 +142,20 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
   async function launchWidget(id: string) {
     setLauncherState('launching');
     try {
-      const result = await apiPost<{ launched: boolean; reason?: string }>(`/settings/widgets/${id}/launch`);
-      setLauncherMessage(result.launched ? 'Desktop widget launched successfully.' : result.reason ?? 'Desktop widget failed to launch.');
+      const widget = widgets.find((item) => item.id === id);
+      if (isHostedEnvironment()) {
+        openWidgetWindow(widget?.route, { width: widget?.width, height: widget?.height });
+        setLauncherMessage('Widget opened in a dedicated browser window. Native desktop launch is available only on local/self-hosted installs.');
+        return;
+      }
+
+      const result = await apiPost<{ launched: boolean; reason?: string; url?: string }>(`/settings/widgets/${id}/launch`);
+      if (result.launched) {
+        setLauncherMessage('Native desktop widget launched successfully.');
+      } else {
+        openWidgetWindow(widget?.route, { width: widget?.width, height: widget?.height });
+        setLauncherMessage(result.reason ?? 'Native launch unavailable. Opened widget in a browser window instead.');
+      }
     } finally {
       setLauncherState('idle');
     }
@@ -128,8 +164,19 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
   async function launchDefaultWidget() {
     setLauncherState('launching');
     try {
-      const result = await apiPost<{ launched: boolean; reason?: string }>('/settings/widgets/launch-default');
-      setLauncherMessage(result.launched ? 'Default desktop widget launched successfully.' : result.reason ?? 'Default desktop widget failed to launch.');
+      if (isHostedEnvironment()) {
+        openWidgetWindow('/overlay/widget?desktop=1');
+        setLauncherMessage('Default widget opened in a dedicated browser window. Native desktop launch is available only on local/self-hosted installs.');
+        return;
+      }
+
+      const result = await apiPost<{ launched: boolean; reason?: string; url?: string }>('/settings/widgets/launch-default');
+      if (result.launched) {
+        setLauncherMessage('Native desktop widget launched successfully.');
+      } else {
+        openWidgetWindow('/overlay/widget?desktop=1');
+        setLauncherMessage(result.reason ?? 'Native launch unavailable. Opened widget in a browser window instead.');
+      }
     } finally {
       setLauncherState('idle');
     }
@@ -229,9 +276,9 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
                     Edit
                   </button>
                   <button className="action-button accent" onClick={() => void launchWidget(widget.id)}>
-                    Launch Desktop
+                    Launch Widget
                   </button>
-                  <button className="action-button" onClick={() => window.open(widget.route, '_blank', 'popup=yes,resizable=yes,width=900,height=400')}>
+                  <button className="action-button" onClick={() => openWidgetWindow(widget.route, { width: widget.width, height: widget.height })}>
                     Open
                   </button>
                   {widget.removable ? (

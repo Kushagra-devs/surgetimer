@@ -23,6 +23,7 @@ const navSections = [
     title: 'Hardware & Broadcast',
     links: [
       ['Hardware', '/hardware-console', 'ALGE'],
+      ['Widgets', '/widgets', 'Display'],
       ['Overlay', '/overlay-preview', 'vMix'],
       ['Spectator Live', '/live', 'Share'],
       ['Simulator', '/simulator', 'Mock'],
