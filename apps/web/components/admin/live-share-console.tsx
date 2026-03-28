@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { apiGet, apiPost } from '../../lib/api';
 import { DEFAULT_PUBLIC_WEB_BASE_URL } from '../../lib/runtime-config';
-import type { PublicLiveFeed } from '@horse-timer/types';
+import type { MobileControlStatus, PublicLiveFeed } from '@horse-timer/types';
 
 const DEFAULT_SHARE_URL = `${DEFAULT_PUBLIC_WEB_BASE_URL}/live`;
 
@@ -34,6 +34,7 @@ export function LiveShareConsole() {
   const [mobileCodeExpiresAt, setMobileCodeExpiresAt] = useState<string | null>(null);
   const [mobileMessage, setMobileMessage] = useState('');
   const [mobileBusy, setMobileBusy] = useState(false);
+  const [mobileStatus, setMobileStatus] = useState<MobileControlStatus | null>(null);
   const [browserOrigin, setBrowserOrigin] = useState('');
   const spectatorQrRef = useRef<HTMLDivElement | null>(null);
   const controlQrRef = useRef<HTMLDivElement | null>(null);
@@ -48,9 +49,13 @@ export function LiveShareConsole() {
     let mounted = true;
 
     async function load() {
-      const result = await apiGet<PublicLiveFeed>('/overlay/public-feed');
+      const [result, status] = await Promise.all([
+        apiGet<PublicLiveFeed>('/overlay/public-feed'),
+        apiGet<MobileControlStatus>('/mobile-access/status'),
+      ]);
       if (mounted) {
         setFeed(result);
+        setMobileStatus(status);
       }
     }
 
@@ -122,6 +127,8 @@ export function LiveShareConsole() {
       setMobileCode(response.code);
       setMobileCodeExpiresAt(response.expiresAt);
       setMobileMessage('New mobile control code generated. Only this latest code will open the mobile timer page.');
+      const status = await apiGet<MobileControlStatus>('/mobile-access/status');
+      setMobileStatus(status);
     } catch (error) {
       setMobileMessage(error instanceof Error ? error.message : 'Unable to generate mobile access code.');
     } finally {
@@ -212,8 +219,26 @@ export function LiveShareConsole() {
                 <span className="info-label">Expires</span>
                 <span className="info-value">{mobileCodeExpiresAt ? new Date(mobileCodeExpiresAt).toLocaleString() : '--'}</span>
               </div>
+              <div className="info-row">
+                <span className="info-label">Campus lock</span>
+                <span className="info-value">{mobileStatus?.campus.address ?? 'Surge Stable campus only'}</span>
+              </div>
+              <div className="info-row">
+                <span className="info-label">Active operators</span>
+                <span className="info-value">{mobileStatus ? `${mobileStatus.activeUsers}/${mobileStatus.campus.maxConcurrentUsers}` : '--'}</span>
+              </div>
             </div>
             {mobileMessage ? <div className="inline-alert" style={{ marginTop: 12 }}>{mobileMessage}</div> : null}
+            {mobileStatus?.sessions?.length ? (
+              <div className="info-list" style={{ marginTop: 12 }}>
+                {mobileStatus.sessions.map((session) => (
+                  <div key={session.id} className="info-row">
+                    <span className="info-label">{session.name}</span>
+                    <span className="info-value">{session.device.platform} · {Math.round(session.distanceMeters)}m · {new Date(session.lastSeenAt).toLocaleTimeString()}</span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="share-qr-grid">

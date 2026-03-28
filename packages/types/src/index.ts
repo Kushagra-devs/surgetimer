@@ -160,6 +160,52 @@ export type HardwareCommissioningReport = {
   checks: HardwareCommissioningStep[];
 };
 
+export type MobileControlDeviceInfo = {
+  userAgent: string;
+  platform: string;
+  language: string;
+  viewport: string;
+};
+
+export type MobileControlLocation = {
+  latitude: number;
+  longitude: number;
+  accuracyMeters: number;
+  capturedAt: string;
+};
+
+export type MobileControlSessionView = {
+  id: string;
+  name: string;
+  createdAt: string;
+  lastSeenAt: string;
+  ipAddress: string;
+  status: 'ACTIVE' | 'EXPIRED' | 'REVOKED';
+  insideCampus: boolean;
+  distanceMeters: number;
+  device: MobileControlDeviceInfo;
+  location: MobileControlLocation;
+};
+
+export type MobileControlCampusPolicy = {
+  venueName: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  radiusMeters: number;
+  maxConcurrentUsers: number;
+};
+
+export type MobileControlStatus = {
+  hasActiveCode: boolean;
+  expiresAt: string | null;
+  codePreview: string | null;
+  activeUsers: number;
+  slotsRemaining: number;
+  campus: MobileControlCampusPolicy;
+  sessions: MobileControlSessionView[];
+};
+
 export type OverlayView = {
   timerState: TimerState;
   stateLabel: 'WARMUP' | 'LIVE' | 'STOPPED' | 'FINISHED' | 'HOLD' | 'READY' | 'IDLE';
