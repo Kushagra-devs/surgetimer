@@ -1,7 +1,9 @@
 const path = require('node:path');
+const http = require('node:http');
 const { app, BrowserWindow, Menu, globalShortcut, shell, screen } = require('electron');
 
 const CUSTOM_PROTOCOL = 'surgetimer-widget';
+const LAUNCHER_PORT = Number(process.env.WIDGET_LAUNCHER_PORT || 43123);
 const DEFAULT_URL = process.env.WIDGET_URL || 'https://surgetimer.vercel.app/overlay/widget?desktop=1';
 const DEFAULT_WIDTH = Number(process.env.WIDGET_WIDTH || 760);
 const DEFAULT_HEIGHT = Number(process.env.WIDGET_HEIGHT || 280);
@@ -12,6 +14,7 @@ let currentUrl = DEFAULT_URL;
 let currentWidth = DEFAULT_WIDTH;
 let currentHeight = DEFAULT_HEIGHT;
 let pendingLaunchCommand = null;
+let launcherServer = null;
 
 function parseLaunchCommand(rawUrl) {
   if (!rawUrl) {
@@ -71,6 +74,105 @@ function registerProtocolClient() {
   }
 
   app.setAsDefaultProtocolClient(CUSTOM_PROTOCOL);
+}
+
+function readJsonBody(request) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    request.on('data', (chunk) => chunks.push(chunk));
+    request.on('end', () => {
+      if (!chunks.length) {
+        resolve({});
+        return;
+      }
+
+      try {
+        resolve(JSON.parse(Buffer.concat(chunks).toString('utf8')));
+      } catch (error) {
+        reject(error);
+      }
+    });
+    request.on('error', reject);
+  });
+}
+
+function writeJson(response, statusCode, payload) {
+  response.writeHead(statusCode, {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Cache-Control': 'no-store',
+  });
+  response.end(JSON.stringify(payload));
+}
+
+function normaliseLaunchPayload(payload) {
+  return {
+    url: typeof payload?.url === 'string' && payload.url ? payload.url : DEFAULT_URL,
+    width: Number.isFinite(Number(payload?.width)) && Number(payload.width) > 0 ? Number(payload.width) : DEFAULT_WIDTH,
+    height: Number.isFinite(Number(payload?.height)) && Number(payload.height) > 0 ? Number(payload.height) : DEFAULT_HEIGHT,
+  };
+}
+
+function startLauncherServer() {
+  if (launcherServer) {
+    return;
+  }
+
+  launcherServer = http.createServer(async (request, response) => {
+    if (!request.url) {
+      writeJson(response, 404, { ok: false });
+      return;
+    }
+
+    if (request.method === 'OPTIONS') {
+      writeJson(response, 204, {});
+      return;
+    }
+
+    if (request.method === 'GET' && request.url === '/health') {
+      writeJson(response, 200, {
+        ok: true,
+        app: 'SurgeTimer Widget Launcher',
+        url: currentUrl,
+        width: currentWidth,
+        height: currentHeight,
+      });
+      return;
+    }
+
+    if (request.method === 'POST' && request.url === '/launch') {
+      try {
+        const body = await readJsonBody(request);
+        const command = normaliseLaunchPayload(body);
+        applyLaunchCommand(command);
+        writeJson(response, 200, {
+          ok: true,
+          launched: true,
+          url: currentUrl,
+          width: currentWidth,
+          height: currentHeight,
+        });
+      } catch (error) {
+        writeJson(response, 400, {
+          ok: false,
+          reason: error instanceof Error ? error.message : 'Invalid widget launch payload.',
+        });
+      }
+      return;
+    }
+
+    if (request.method === 'POST' && request.url === '/close') {
+      app.quit();
+      writeJson(response, 200, { ok: true, closed: true });
+      return;
+    }
+
+    writeJson(response, 404, { ok: false, reason: 'Not found' });
+  });
+
+  launcherServer.listen(LAUNCHER_PORT, '127.0.0.1');
 }
 
 function createWidgetWindow() {
@@ -186,6 +288,7 @@ app.on('open-url', (event, rawUrl) => {
 
 app.whenReady().then(() => {
   registerProtocolClient();
+  startLauncherServer();
   pendingLaunchCommand = pendingLaunchCommand ?? parseLaunchCommandFromArgv(process.argv);
   createWidgetWindow();
   applyLaunchCommand(pendingLaunchCommand);
@@ -209,4 +312,8 @@ app.on('window-all-closed', () => {
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();
+  if (launcherServer) {
+    launcherServer.close();
+    launcherServer = null;
+  }
 });

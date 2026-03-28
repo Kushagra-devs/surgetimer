@@ -28,6 +28,8 @@ type WidgetManagerProps = {
   focus?: 'ALL' | 'BRANDING';
 };
 
+const LOCAL_WIDGET_LAUNCHER_URL = 'http://127.0.0.1:43123';
+
 function buildPreviewWidget(draft: Partial<WidgetDefinition>, editingId: string | null): WidgetDefinition {
   const id = editingId ?? 'preview-widget';
   return {
@@ -60,6 +62,7 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
   const [previewRevision, setPreviewRevision] = useState(0);
   const [launcherState, setLauncherState] = useState<'idle' | 'launching' | 'closing'>('idle');
   const [launcherMessage, setLauncherMessage] = useState<string | null>(null);
+  const [launcherReachability, setLauncherReachability] = useState<'unknown' | 'online' | 'offline'>('unknown');
 
   async function load() {
     const data = await apiGet<WidgetDefinition[]>('/settings/widgets');
@@ -68,6 +71,40 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
 
   useEffect(() => {
     void load();
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    let cancelled = false;
+
+    async function probeLauncher() {
+      try {
+        const response = await fetch(`${LOCAL_WIDGET_LAUNCHER_URL}/health`, {
+          method: 'GET',
+          cache: 'no-store',
+        });
+        if (!cancelled) {
+          setLauncherReachability(response.ok ? 'online' : 'offline');
+        }
+      } catch {
+        if (!cancelled) {
+          setLauncherReachability('offline');
+        }
+      }
+    }
+
+    void probeLauncher();
+    const interval = window.setInterval(() => {
+      void probeLauncher();
+    }, 5000);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {
@@ -127,6 +164,27 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
     window.location.href = launchUrl;
   }
 
+  async function requestLocalLauncher(widgetRoute?: string, dimensions?: { width?: number; height?: number }) {
+    const response = await fetch(`${LOCAL_WIDGET_LAUNCHER_URL}/launch`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url: buildWidgetUrl(widgetRoute),
+        width: Math.max(520, dimensions?.width ?? 900),
+        height: Math.max(260, dimensions?.height ?? 420),
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Local widget launcher is not reachable.');
+    }
+
+    setLauncherReachability('online');
+    return response.json();
+  }
+
   function isHostedEnvironment() {
     if (typeof window === 'undefined') {
       return false;
@@ -161,8 +219,13 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
     try {
       const widget = widgets.find((item) => item.id === id);
       if (isHostedEnvironment()) {
-        requestDesktopLaunch(widget?.route, { width: widget?.width, height: widget?.height });
-        setLauncherMessage('Desktop launch signal sent. If the SurgeTimer Widget app is installed on this machine, it should open immediately.');
+        try {
+          await requestLocalLauncher(widget?.route, { width: widget?.width, height: widget?.height });
+          setLauncherMessage('Native widget launched through the local SurgeTimer Widget bridge.');
+        } catch {
+          requestDesktopLaunch(widget?.route, { width: widget?.width, height: widget?.height });
+          setLauncherMessage('Local launcher was offline, so a desktop launch request was sent through the system protocol. Open the SurgeTimer Widget app once if nothing appears.');
+        }
         return;
       }
 
@@ -182,8 +245,13 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
     setLauncherState('launching');
     try {
       if (isHostedEnvironment()) {
-        requestDesktopLaunch('/overlay/widget?desktop=1');
-        setLauncherMessage('Desktop launch signal sent. If the SurgeTimer Widget app is installed on this machine, it should open immediately.');
+        try {
+          await requestLocalLauncher('/overlay/widget?desktop=1');
+          setLauncherMessage('Native widget launched through the local SurgeTimer Widget bridge.');
+        } catch {
+          requestDesktopLaunch('/overlay/widget?desktop=1');
+          setLauncherMessage('Local launcher was offline, so a desktop launch request was sent through the system protocol. Open the SurgeTimer Widget app once if nothing appears.');
+        }
         return;
       }
 
@@ -257,6 +325,10 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
             {launcherMessage}
           </div>
         ) : null}
+        <div className="info-row" style={{ marginTop: 14 }}>
+          <span className="info-label">Local widget bridge</span>
+          <span className="info-value">{launcherReachability === 'online' ? 'Online' : launcherReachability === 'offline' ? 'Offline' : 'Checking'}</span>
+        </div>
       </div>
 
       <div className="section-grid admin-two-panel">
