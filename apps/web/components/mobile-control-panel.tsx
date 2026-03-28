@@ -66,6 +66,9 @@ export function MobileControlPanel({ initialCode }: { initialCode?: string }) {
   const [sessionToken, setSessionToken] = useState('');
   const [location, setLocation] = useState<MobileControlLocation | null>(null);
   const [now, setNow] = useState(() => Date.now());
+  const maxConcurrentUsers = mobileStatus?.campus?.maxConcurrentUsers ?? 2;
+  const campusAddress = mobileStatus?.campus?.address ?? 'Surge Stable campus only';
+  const activeSessions = mobileStatus?.sessions ?? [];
 
   useEffect(() => {
     let mounted = true;
@@ -316,8 +319,8 @@ export function MobileControlPanel({ initialCode }: { initialCode?: string }) {
           <div className="inline-alert" style={{ marginTop: 16 }}>{accessMessage}</div>
           {mobileStatus ? (
             <div className="info-list" style={{ marginTop: 16 }}>
-              <div className="info-row"><span className="info-label">Allowed operators</span><span className="info-value">{mobileStatus.activeUsers} / {mobileStatus.campus.maxConcurrentUsers}</span></div>
-              <div className="info-row"><span className="info-label">Campus</span><span className="info-value">{mobileStatus.campus.address}</span></div>
+              <div className="info-row"><span className="info-label">Allowed operators</span><span className="info-value">{mobileStatus.activeUsers} / {maxConcurrentUsers}</span></div>
+              <div className="info-row"><span className="info-label">Campus</span><span className="info-value">{campusAddress}</span></div>
             </div>
           ) : null}
         </section>
@@ -339,8 +342,8 @@ export function MobileControlPanel({ initialCode }: { initialCode?: string }) {
                 : 'Simulator'
               : 'Hardware Offline'}
           </span>
-          <span className={`status-chip ${mobileStatus && mobileStatus.activeUsers <= mobileStatus.campus.maxConcurrentUsers ? 'ok' : 'warn'}`}>
-            {mobileStatus ? `${mobileStatus.activeUsers}/${mobileStatus.campus.maxConcurrentUsers} operators` : 'Operators --'}
+          <span className={`status-chip ${mobileStatus && mobileStatus.activeUsers <= maxConcurrentUsers ? 'ok' : 'warn'}`}>
+            {mobileStatus ? `${mobileStatus.activeUsers}/${maxConcurrentUsers} operators` : 'Operators --'}
           </span>
         </div>
 
@@ -370,15 +373,15 @@ export function MobileControlPanel({ initialCode }: { initialCode?: string }) {
 
         <div className="info-list" style={{ marginTop: 16 }}>
           <div className="info-row"><span className="info-label">Operator</span><span className="info-value">{operatorName || '--'}</span></div>
-          <div className="info-row"><span className="info-label">Campus distance</span><span className="info-value">{mobileStatus?.sessions[0] ? `${Math.round(mobileStatus.sessions[0].distanceMeters)}m` : '--'}</span></div>
+          <div className="info-row"><span className="info-label">Campus distance</span><span className="info-value">{activeSessions[0] ? `${Math.round(activeSessions[0].distanceMeters)}m` : '--'}</span></div>
           <div className="info-row"><span className="info-label">Last sensor</span><span className="info-value">{state?.snapshot.context.lastSensorMessage?.channel ?? '--'}</span></div>
           <div className="info-row"><span className="info-label">Payload</span><span className="info-value">{state?.snapshot.context.lastSensorMessage?.rawPayload ?? '--'}</span></div>
           <div className="info-row"><span className="info-label">Warnings</span><span className="info-value">{state?.snapshot.context.warnings.at(-1) ?? 'None'}</span></div>
         </div>
 
-        {mobileStatus?.sessions?.length ? (
+        {activeSessions.length ? (
           <div className="info-list" style={{ marginTop: 16 }}>
-            {mobileStatus.sessions.map((session) => (
+            {activeSessions.map((session) => (
               <div key={session.id} className="info-row">
                 <span className="info-label">{session.name}</span>
                 <span className="info-value">{session.device.platform} · {Math.round(session.distanceMeters)}m · {new Date(session.lastSeenAt).toLocaleTimeString()}</span>
