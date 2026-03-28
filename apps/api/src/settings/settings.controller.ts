@@ -75,19 +75,20 @@ export class SettingsController {
   }
 
   @Post('widgets/:id/launch')
-  launchWidget(@Param('id') id: string) {
+  launchWidget(@Param('id') id: string, @Body('publicBaseUrl') publicBaseUrl?: string) {
     const widget = this.settingsService.getWidget(id);
 
     return this.widgetLauncherService.launch({
       widgetId: id,
       width: widget?.width,
       height: widget?.height,
+      publicBaseUrl,
     });
   }
 
   @Post('widgets/launch-default')
-  launchDefaultWidget() {
-    return this.widgetLauncherService.launch({});
+  launchDefaultWidget(@Body('publicBaseUrl') publicBaseUrl?: string) {
+    return this.widgetLauncherService.launch({ publicBaseUrl });
   }
 
   @Post('widgets/close-all')

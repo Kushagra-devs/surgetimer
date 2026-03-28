@@ -11,6 +11,7 @@ export class WidgetLauncherService {
     widgetId?: string;
     width?: number;
     height?: number;
+    publicBaseUrl?: string;
   }) {
     const rootDir = this.resolveRepoRoot();
 
@@ -38,7 +39,7 @@ export class WidgetLauncherService {
       };
     }
 
-    const publicBaseUrl = process.env.PUBLIC_WEB_BASE_URL || 'https://surgetimer.vercel.app';
+    const publicBaseUrl = this.resolvePublicBaseUrl(options.publicBaseUrl);
     const url = new URL(`${publicBaseUrl.replace(/\/$/, '')}/overlay/widget`);
     url.searchParams.set('desktop', '1');
     if (options.widgetId) {
@@ -94,6 +95,22 @@ export class WidgetLauncherService {
         });
       }, 1500);
     });
+  }
+
+  private resolvePublicBaseUrl(preferred?: string) {
+    if (preferred) {
+      return preferred.replace(/\/$/, '');
+    }
+
+    if (process.env.PUBLIC_WEB_BASE_URL) {
+      return process.env.PUBLIC_WEB_BASE_URL.replace(/\/$/, '');
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      return 'http://localhost:3001';
+    }
+
+    return 'https://surgetimer.vercel.app';
   }
 
   closeAll() {

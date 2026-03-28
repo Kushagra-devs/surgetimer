@@ -229,9 +229,11 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
         return;
       }
 
-      const result = await apiPost<{ launched: boolean; reason?: string; url?: string }>(`/settings/widgets/${id}/launch`);
+      const result = await apiPost<{ launched: boolean; reason?: string; url?: string }>(`/settings/widgets/${id}/launch`, {
+        publicBaseUrl: hostedWidgetBase,
+      });
       if (result.launched) {
-        setLauncherMessage('Native desktop widget launched successfully.');
+        setLauncherMessage(`Native desktop widget launched successfully from ${result.url ?? hostedWidgetBase}.`);
       } else {
         openWidgetWindow(widget?.route, { width: widget?.width, height: widget?.height });
         setLauncherMessage(result.reason ?? 'Native launch unavailable. Opened widget in a browser window instead.');
@@ -255,9 +257,11 @@ export function WidgetManager({ focus = 'ALL' }: WidgetManagerProps) {
         return;
       }
 
-      const result = await apiPost<{ launched: boolean; reason?: string; url?: string }>('/settings/widgets/launch-default');
+      const result = await apiPost<{ launched: boolean; reason?: string; url?: string }>('/settings/widgets/launch-default', {
+        publicBaseUrl: hostedWidgetBase,
+      });
       if (result.launched) {
-        setLauncherMessage('Native desktop widget launched successfully.');
+        setLauncherMessage(`Native desktop widget launched successfully from ${result.url ?? hostedWidgetBase}.`);
       } else {
         openWidgetWindow('/overlay/widget?desktop=1');
         setLauncherMessage(result.reason ?? 'Native launch unavailable. Opened widget in a browser window instead.');

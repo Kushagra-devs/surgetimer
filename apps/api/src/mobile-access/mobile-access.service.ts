@@ -1,4 +1,4 @@
-import { ForbiddenException, Inject, Injectable, TooManyRequestsException, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { addAudit } from '../common/demo-store';
 import { TimingService } from '../timing/timing.service';
@@ -111,7 +111,10 @@ export class MobileAccessService {
     const activeSessions = this.getActiveSessions();
     const campus = this.getCampusPolicy();
     if (activeSessions.length >= campus.maxConcurrentUsers) {
-      throw new TooManyRequestsException(`Only ${campus.maxConcurrentUsers} mobile controllers can stay active at one time.`);
+      throw new HttpException(
+        `Only ${campus.maxConcurrentUsers} mobile controllers can stay active at one time.`,
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
     }
 
     const token = randomUUID();
